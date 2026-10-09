@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Mishu! ✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: linear-gradient(135deg, #1f001b, #3b0030, #0f0017);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Floating Hearts Background */
+    .bg-hearts {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .heart-particle {
+      position: absolute;
+      bottom: -10vh;
+      color: rgba(255, 105, 180, 0.4);
+      font-size: 1.5rem;
+      animation: floatUp 8s linear infinite;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.8; }
+      100% { transform: translateY(-110vh) scale(1.2) rotate(360deg); opacity: 0; }
+    }
+
+    /* Main Container */
+    .container {
+      position: relative;
+      z-index: 10;
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    /* Tap Envelope / Heart Lock */
+    .envelope-box {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 24px;
+      padding: 40px 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(255, 182, 193, 0.2);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .envelope-box:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(255, 75, 145, 0.3);
+    }
+
+    .heart-btn {
+      font-size: 4rem;
+      animation: pulse 1.5s infinite;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); filter: drop-shadow(0 0 15px #ff4b91); }
+      100% { transform: scale(1); }
+    }
+
+    .tap-hint {
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      color: #ffb3d9;
+      font-weight: 300;
+    }
+
+    /* Secret Card (Hidden initially) */
+    .card {
+      display: none;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 24px;
+      padding: 30px 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      animation: fadeInScale 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.27) forwards;
+    }
+
+    @keyframes fadeInScale {
+      0% { opacity: 0; transform: scale(0.7); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3.2rem;
+      color: #ff75a0;
+      text-shadow: 0 0 10px rgba(255, 117, 160, 0.6);
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: #ffd1e8;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .speech-box {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #f1f1f1;
+      font-weight: 300;
+      min-height: 140px;
+      margin-bottom: 25px;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 18px;
+      border-radius: 16px;
+      border-left: 3px solid #ff4b91;
+    }
+
+    .replay-btn {
+      background: linear-gradient(45deg, #ff4b91, #ff75a0);
+      border: none;
+      color: white;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 75, 145, 0.4);
+      transition: all 0.3s ease;
+    }
+    .replay-btn:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-hearts" id="heartsBg"></div>
+
+  <div class="container">
+    <!-- Unopened Gift Box -->
+    <div class="envelope-box" id="openBtn">
+      <div class="heart-btn">💖</div>
+      <p class="tap-hint">Tap to open your surprise, <b>Mishu</b> ✨</p>
+    </div>
+
+    <!-- Birthday Card Reveal -->
+    <div class="card" id="card">
+      <h1>Happy Birthday, Mishu! 🎂</h1>
+      <p class="subtitle">✨ Today is all about you ✨</p>
+      
+      <div class="speech-box">
+        <p id="typedText"></p>
+      </div>
+
+      <button class="replay-btn" id="confettiBtn">Celebrate More 🎉</button>
+    </div>
+  </div>
+
+  <script>
+    // Generate Floating Background Hearts
+    const heartsBg = document.getElementById('heartsBg');
+    const heartIcons = ['💖', '💕', '✨', '🌸', '💖'];
+    
+    for (let i = 0; i < 25; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart-particle';
+      heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDelay = Math.random() * 5 + 's';
+      heart.style.animationDuration = (6 + Math.random() * 4) + 's';
+      heartsBg.appendChild(heart);
+    }
+
+    // Birthday Message Text
+    const speech = "To the most wonderful person, Mishu... 🌸\n\nMay your day be filled with endless smiles, gentle warmth, and moments that make your heart happy. Thank you for bringing so much brightness into the world just by being yourself.\n\nWishing you a year full of dreams fulfilled, pure joy, and infinite blessings. Happy Birthday! 💕";
+
+    const openBtn = document.getElementById('openBtn');
+    const card = document.getElementById('card');
+    const typedTextEl = document.getElementById('typedText');
+    const confettiBtn = document.getElementById('confettiBtn');
+
+    let textIndex = 0;
+
+    function typeWriter() {
+      if (textIndex < speech.length) {
+        let char = speech.charAt(textIndex);
+        if (char === '\n') {
+          typedTextEl.innerHTML += '<br>';
+        } else {
+          typedTextEl.innerHTML += char;
+        }
+        textIndex++;
+        setTimeout(typeWriter, 35);
+      }
+    }
+
+    function fireConfetti() {
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#ff4b91', '#ff75a0', '#ffffff', '#ffd1e8']
+      });
+    }
+
+    openBtn.addEventListener('click', () => {
+      openBtn.style.display = 'none';
+      card.style.display = 'block';
+      
+      // Fire confetti burst
+      fireConfetti();
+      setTimeout(fireConfetti, 400);
+
+      // Start text typing animation
+      typeWriter();
+    });
+
+    confettiBtn.addEventListener('click', () => {
+      fireConfetti();
+    });
+  </script>
+</body>
+</html>
